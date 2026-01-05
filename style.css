@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.todo-container {
+    background: #fff;
+    padding: 20px;
+    width: 350px;
+    border-radius: 8px;
+}
+
+.input-section {
+    display: flex;
+    gap: 8px;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    border-style: none;
+    border-radius: 8px;
+    background-color: #f2f2f2;
+}
+
+button {
+    background-color: rgb(86, 86, 255);
+    border-style: none;
+    border-radius: 8px;
+    color: white;
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+li {
+    background: #eee;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.material-icons {
+    cursor: pointer;
+    color: #555;
+}
+
+.completed-task {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.completed-text {
+    color: green;
+    cursor: pointer;
+    font-size: 14px;
+}
