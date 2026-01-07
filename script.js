@@ -1,51 +1,58 @@
+const datePicker = document.getElementById("datePicker");
 const taskInput = document.getElementById("taskInput");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
 
+const today = new Date().toISOString().split("T")[0];
+datePicker.value = today;
+
+datePicker.addEventListener("change", renderTasks);
 addBtn.addEventListener("click", addTask);
 
-function addTask() {
-    const taskText = taskInput.value.trim();
+let tasks = {}; // { date: [task1, task2] }
 
-    if (taskText === "") {
-        alert("Please enter a task");
-        return;
+function getDateType(date) {
+    if (date < today) return "past";
+    if (date === today) return "today";
+    return "future";
+}
+
+function renderTasks() {
+    const selectedDate = datePicker.value;
+    const dateType = getDateType(selectedDate);
+
+    taskList.innerHTML = "";
+
+    // Disable input for past dates
+    if (dateType === "past") {
+        taskInput.disabled = true;
+        addBtn.disabled = true;
+    } else {
+        taskInput.disabled = false;
+        addBtn.disabled = false;
     }
 
-    const li = document.createElement("li");
-    
-    const leftDiv = document.createElement("div");
-    leftDiv.className = "task-left";
-
-    const checkboxIcon = document.createElement("span");
-    checkboxIcon.className = "material-icons";
-    checkboxIcon.textContent = "check_box_outline_blank";
-
-    const taskSpan = document.createElement("span");
-    taskSpan.textContent = taskText;
-
-    checkboxIcon.addEventListener("click", () => {
-        taskSpan.classList.toggle("completed-task");
-
-        checkboxIcon.textContent =
-            checkboxIcon.textContent === "check_box_outline_blank"
-                ? "check_box"
-                : "check_box_outline_blank";
+    (tasks[selectedDate] || []).forEach(task => {
+        const li = document.createElement("li");
+        li.textContent = task;
+        li.className = dateType;
+        taskList.appendChild(li);
     });
-
-    leftDiv.appendChild(checkboxIcon);
-    leftDiv.appendChild(taskSpan);
-    const completedText = document.createElement("span");
-    completedText.textContent = "Completed";
-    completedText.className = "completed-text";
-
-    completedText.addEventListener("click", () => {
-        li.remove();
-    });
-
-    li.appendChild(leftDiv);
-    li.appendChild(completedText);
-    taskList.appendChild(li);
-
-    taskInput.value = "";
 }
+
+function addTask() {
+    const selectedDate = datePicker.value;
+    const taskText = taskInput.value.trim();
+
+    if (taskText === "") return;
+
+    if (!tasks[selectedDate]) {
+        tasks[selectedDate] = [];
+    }
+
+    tasks[selectedDate].push(taskText);
+    taskInput.value = "";
+    renderTasks();
+}
+
+renderTasks();

@@ -7,69 +7,53 @@ body {
     height: 100vh;
 }
 
-.todo-container {
-    background: #fff;
+.container {
+    background: white;
     padding: 20px;
-    width: 350px;
+    width: 380px;
     border-radius: 8px;
 }
 
-.input-section {
+h2 {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
 }
 
-input {
-    flex: 1;
+input, button {
     padding: 8px;
-    border-style: none;
-    border-radius: 8px;
-    background-color: #f2f2f2;
-}
-
-button {
-    background-color: rgb(86, 86, 255);
-    border-style: none;
-    border-radius: 8px;
-    color: white;
-    padding: 8px 20px;
-    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
 }
 
 ul {
     list-style: none;
     padding: 0;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 li {
-    background: #eee;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 6px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 
-.task-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* Color variations */
+.past {
+    background: #ddd;
+    color: #666;
 }
 
-.material-icons {
-    cursor: pointer;
-    color: #555;
+.today {
+    background: #cce5ff;
 }
 
-.completed-task {
-    text-decoration: line-through;
-    color: gray;
+.future {
+    background: #d4edda;
 }
 
-.completed-text {
-    color: green;
-    cursor: pointer;
-    font-size: 14px;
+.disabled {
+    opacity: 0.6;
+    pointer-events: none;
 }

@@ -2,17 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>To-Do List App</title>
+    <title>To-Do Calendar</title>
+
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="todo-container">
-    <h2>To-Do List</h2>
+<div class="container">
+    <h2>
+        <span class="material-icons">calendar_month</span>
+        To-Do Calendar
+    </h2>
 
+    <!-- Date Picker -->
+    <input type="date" id="datePicker">
+
+    <!-- Task Input -->
     <div class="input-section">
-        <input type="text" id="taskInput" placeholder="Enter a task">
+        <input type="text" id="taskInput" placeholder="Add task">
         <button id="addBtn">Add</button>
     </div>
 
