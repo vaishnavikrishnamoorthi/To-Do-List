@@ -76,14 +76,15 @@ li {
     border-radius: 6px;
     font-size: 14px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    
 }
 
 .task-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .task-completed {
