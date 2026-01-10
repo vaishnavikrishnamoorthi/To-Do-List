@@ -6,10 +6,14 @@ const taskList = document.getElementById("taskList");
 const today = new Date().toISOString().split("T")[0];
 datePicker.value = today;
 
-let tasks = {}; // { date: [{ text, completed }] }
+let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
 
 datePicker.addEventListener("change", renderTasks);
 addBtn.addEventListener("click", addTask);
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
 function getDateType(date) {
     if (date < today) return "past";
@@ -18,12 +22,12 @@ function getDateType(date) {
 }
 
 function renderTasks() {
-    const selectedDate = datePicker.value;
-    const dateType = getDateType(selectedDate);
-
     taskList.innerHTML = "";
 
-    if (dateType === "past") {
+    const selectedDate = datePicker.value;
+    const selectedDateType = getDateType(selectedDate);
+
+    if (selectedDateType === "past") {
         taskInput.disabled = true;
         addBtn.disabled = true;
     } else {
@@ -31,44 +35,59 @@ function renderTasks() {
         addBtn.disabled = false;
     }
 
-    (tasks[selectedDate] || []).forEach((task, index) => {
-        const li = document.createElement("li");
-        li.className = dateType;
+    const allDates = Object.keys(tasks).sort();
 
-        const leftDiv = document.createElement("div");
-        leftDiv.className = "task-left";
+    allDates.forEach(date => {
+        const dateType = getDateType(date);
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = task.completed;
+        tasks[date].forEach((task, index) => {
+            const li = document.createElement("li");
+            li.className = dateType;
 
-        const taskText = document.createElement("span");
-        taskText.textContent = task.text;
+            const leftDiv = document.createElement("div");
+            leftDiv.className = "task-left";
 
-        if (task.completed) {
-            taskText.classList.add("task-completed");
-        }
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.checked = task.completed;
+            checkbox.disabled = dateType === "past";
 
-        checkbox.addEventListener("change", () => {
-            task.completed = checkbox.checked;
-            taskText.classList.toggle("task-completed");
+            checkbox.addEventListener("change", () => {
+                task.completed = checkbox.checked;
+                saveTasks();
+                renderTasks();
+            });
+
+            const span = document.createElement("span");
+            span.className = "task-text";
+            span.textContent = `${task.text} (${date})`;
+
+            if (task.completed) {
+                span.classList.add("completed");
+            }
+
+            leftDiv.appendChild(checkbox);
+            leftDiv.appendChild(span);
+
+            const deleteBtn = document.createElement("span");
+            deleteBtn.className = "material-icons delete-btn";
+            deleteBtn.textContent = "delete";
+
+            deleteBtn.addEventListener("click", () => {
+                tasks[date].splice(index, 1);
+
+                if (tasks[date].length === 0) {
+                    delete tasks[date];
+                }
+
+                saveTasks();
+                renderTasks();
+            });
+
+            li.appendChild(leftDiv);
+            li.appendChild(deleteBtn);
+            taskList.appendChild(li);
         });
-
-        leftDiv.appendChild(checkbox);
-        leftDiv.appendChild(taskText);
-
-        const deleteBtn = document.createElement("span");
-        deleteBtn.textContent = "🗑";
-        deleteBtn.className = "delete-btn";
-
-        deleteBtn.addEventListener("click", () => {
-            tasks[selectedDate].splice(index, 1);
-            renderTasks();
-        });
-
-        li.appendChild(leftDiv);
-        li.appendChild(deleteBtn);
-        taskList.appendChild(li);
     });
 }
 
@@ -88,6 +107,7 @@ function addTask() {
     });
 
     taskInput.value = "";
+    saveTasks();
     renderTasks();
 }
 
