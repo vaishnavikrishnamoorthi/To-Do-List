@@ -43,10 +43,6 @@ button {
     border: 1px solid #ccc;
 }
 
-input[type="date"] {
-    cursor: pointer;
-}
-
 input:focus {
     outline: none;
     border-color: #4a90e2;
@@ -71,7 +67,6 @@ input:disabled {
 
 ul {
     list-style: none;
-    padding: 0;
     margin-top: 18px;
 }
 
@@ -80,8 +75,29 @@ li {
     margin-bottom: 8px;
     border-radius: 6px;
     font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.task-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete-btn {
+    cursor: pointer;
+    color: red;
+    font-size: 18px;
+}
+
+/* Date-based colors */
 .past {
     background: #e0e0e0;
     color: #666;

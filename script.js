@@ -6,10 +6,10 @@ const taskList = document.getElementById("taskList");
 const today = new Date().toISOString().split("T")[0];
 datePicker.value = today;
 
+let tasks = {}; // { date: [{ text, completed }] }
+
 datePicker.addEventListener("change", renderTasks);
 addBtn.addEventListener("click", addTask);
-
-let tasks = {}; // { date: [task1, task2] }
 
 function getDateType(date) {
     if (date < today) return "past";
@@ -23,7 +23,6 @@ function renderTasks() {
 
     taskList.innerHTML = "";
 
-    // Disable input for past dates
     if (dateType === "past") {
         taskInput.disabled = true;
         addBtn.disabled = true;
@@ -32,10 +31,43 @@ function renderTasks() {
         addBtn.disabled = false;
     }
 
-    (tasks[selectedDate] || []).forEach(task => {
+    (tasks[selectedDate] || []).forEach((task, index) => {
         const li = document.createElement("li");
-        li.textContent = task;
         li.className = dateType;
+
+        const leftDiv = document.createElement("div");
+        leftDiv.className = "task-left";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed;
+
+        const taskText = document.createElement("span");
+        taskText.textContent = task.text;
+
+        if (task.completed) {
+            taskText.classList.add("task-completed");
+        }
+
+        checkbox.addEventListener("change", () => {
+            task.completed = checkbox.checked;
+            taskText.classList.toggle("task-completed");
+        });
+
+        leftDiv.appendChild(checkbox);
+        leftDiv.appendChild(taskText);
+
+        const deleteBtn = document.createElement("span");
+        deleteBtn.textContent = "🗑";
+        deleteBtn.className = "delete-btn";
+
+        deleteBtn.addEventListener("click", () => {
+            tasks[selectedDate].splice(index, 1);
+            renderTasks();
+        });
+
+        li.appendChild(leftDiv);
+        li.appendChild(deleteBtn);
         taskList.appendChild(li);
     });
 }
@@ -50,7 +82,11 @@ function addTask() {
         tasks[selectedDate] = [];
     }
 
-    tasks[selectedDate].push(taskText);
+    tasks[selectedDate].push({
+        text: taskText,
+        completed: false
+    });
+
     taskInput.value = "";
     renderTasks();
 }
